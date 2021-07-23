@@ -1,4 +1,5 @@
 const express = require("express")
+const emailValidator = require("email-validator")
 require("./db");
 const User = require("./models")
 
@@ -11,6 +12,9 @@ app.get('/', (req,res) => {
 
 app.post('/api/users', async(req,res) => {
     try{
+        var email = req.body.email;
+        if(!emailValidator.validate(email)) return res.status(500).send("Invalid Email");
+        
         const user = new User({
             name : req.body.name,
             email: req.body.email
